@@ -19,19 +19,23 @@ PORT = os.getenv('PORT', '8000')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
+# Always start with localhost for development
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Add hosts from environment variable
 ALLOWED_HOSTS_STR = os.environ.get('ALLOWED_HOSTS', '')
 if ALLOWED_HOSTS_STR:
-    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_STR.split(',')]
-else:
-    # Default for development
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-    # Add Render domain in production
-    if not DEBUG:
-        ALLOWED_HOSTS.extend([
-            'rgb-dimensionality-reduction-using.onrender.com',
-            '.onrender.com'
-        ])
+    ALLOWED_HOSTS.extend([host.strip() for host in ALLOWED_HOSTS_STR.split(',') if host.strip()])
 
+# Add Render domain in production
+if not DEBUG:
+    ALLOWED_HOSTS.extend([
+        'rgb-dimensionality-reduction-using.onrender.com',
+        '.onrender.com'
+    ])
+
+# Remove duplicates
+ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -179,7 +183,7 @@ EMAIL_HOST_USER = "userauthentication.autoencoder@gmail.com"
 
 # Production Security
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

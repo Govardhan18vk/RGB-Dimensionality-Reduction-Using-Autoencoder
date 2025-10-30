@@ -33,3 +33,4 @@ Thumbs.db
 # Model files (if too large for git)
 *.keras
 *.h5
+media/
