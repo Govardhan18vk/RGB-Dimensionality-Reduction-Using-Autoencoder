@@ -2,7 +2,6 @@ services:
   - type: web
     name: django-autoencoder
     env: python
-    region: oregon
     plan: starter  # or free - adjust based on your needs
     buildCommand: "./build.sh"
     startCommand: "gunicorn user.wsgi:application --workers 2 --threads 4 --timeout 300 --log-level info --access-logfile - --error-logfile -"
